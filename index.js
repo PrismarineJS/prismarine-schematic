@@ -2,6 +2,8 @@ const fs = require('fs').promises
 const nbt = require('prismarine-nbt')
 const promisify = require('util').promisify
 const parseNbt = promisify(nbt.parse)
+const zlib = require('zlib')
+const gzip = promisify(zlib.gzip)
 
 const sponge = require('./lib/spongeSchematic')
 const mcedit = require('./lib/mceditSchematic')
@@ -40,6 +42,12 @@ class Schematic {
     } catch {
       return mcedit.read(schem, version)
     }
+  }
+
+  async write (path) {
+    const schem = sponge.write(this)
+    const buffer = await gzip(nbt.writeUncompressed(schem))
+    await fs.writeFile(path, buffer)
   }
 }
 
