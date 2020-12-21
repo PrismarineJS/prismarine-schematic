@@ -1,9 +1,9 @@
-const fs = require('fs').promises
 const nbt = require('prismarine-nbt')
-const promisify = require('util').promisify
+const promisify = f => (...args) => new Promise((resolve, reject) => f(...args, (err, res) => err ? reject(err) : resolve(res)))
 const parseNbt = promisify(nbt.parse)
 const zlib = require('zlib')
 const gzip = promisify(zlib.gzip)
+const { Vec3 } = require('vec3')
 
 const sponge = require('./lib/spongeSchematic')
 const mcedit = require('./lib/mceditSchematic')
@@ -26,17 +26,33 @@ class Schematic {
     return this.start().plus(this.size)
   }
 
-  getBlock (pos) {
+  getBlockStateId (pos) {
     const p = pos.minus(this.offset).floor()
-    if (p.x < 0 || p.y < 0 || p.z < 0 || p.x >= this.size.x || p.y >= this.size.y || p.z >= this.size.z) { return this.Block.fromStateId(0, 0) }
+    if (p.x < 0 || p.y < 0 || p.z < 0 || p.x >= this.size.x || p.y >= this.size.y || p.z >= this.size.z) { return 0 }
     const idx = (p.y * this.size.z + p.z) * this.size.x + p.x
-    const stateId = this.palette[this.blocks[idx]]
-    return this.Block.fromStateId(stateId, 0)
+    return this.palette[this.blocks[idx]]
   }
 
-  static async read (path, version = null) {
-    const file = await fs.readFile(path)
-    const schem = nbt.simplify(await parseNbt(file))
+  getBlock (pos) {
+    return this.Block.fromStateId(this.getBlockStateId(pos), 0)
+  }
+
+  paste (world, at) {
+    const cursor = new Vec3(0, 0, 0)
+    const start = this.start()
+    const end = this.end()
+    for (cursor.y = start.y; cursor.y < end.y; cursor.y++) {
+      for (cursor.z = start.z; cursor.z < end.z; cursor.z++) {
+        for (cursor.x = start.x; cursor.x < end.x; cursor.x++) {
+          const pos = at.plus(cursor)
+          world.setBlockStateId(pos, this.getBlockStateId(cursor))
+        }
+      }
+    }
+  }
+
+  static async read (buffer, version = null) {
+    const schem = nbt.simplify(await parseNbt(buffer))
     try {
       return sponge.read(schem, version)
     } catch {
@@ -44,10 +60,9 @@ class Schematic {
     }
   }
 
-  async write (path) {
+  async write () {
     const schem = sponge.write(this)
-    const buffer = await gzip(nbt.writeUncompressed(schem))
-    await fs.writeFile(path, buffer)
+    return gzip(nbt.writeUncompressed(schem))
   }
 }
 
