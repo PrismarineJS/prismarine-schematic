@@ -37,7 +37,7 @@ class Schematic {
     return this.Block.fromStateId(this.getBlockStateId(pos), 0)
   }
 
-  paste (world, at) {
+  async paste (world, at) {
     const cursor = new Vec3(0, 0, 0)
     const start = this.start()
     const end = this.end()
@@ -45,7 +45,7 @@ class Schematic {
       for (cursor.z = start.z; cursor.z < end.z; cursor.z++) {
         for (cursor.x = start.x; cursor.x < end.x; cursor.x++) {
           const pos = at.plus(cursor)
-          world.setBlockStateId(pos, this.getBlockStateId(cursor))
+          await world.setBlockStateId(pos, this.getBlockStateId(cursor))
         }
       }
     }
