@@ -56,10 +56,14 @@ Get the stateId of the block at `pos`. `pos` must be between `start()` and `end(
 
 Get the block at `pos`. `pos` must be between `start()` and `end()`.
 
+#### Schematic.paste(world, at)
+
+Async. Paste the schematic in `world` (prismarine-world) at the `at` (vec3) location.
+
 #### Schematic.read(buffer)
 
-Static. Return a Schematic instance, read from the buffer.
+Static, async. Return a Schematic instance, read from the buffer.
 
 #### Schematic.write()
 
-Return a buffer encoding this schematic
+Async. Return a buffer encoding this schematic
