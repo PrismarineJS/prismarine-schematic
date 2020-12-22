@@ -60,9 +60,9 @@ Get the block at `pos`. `pos` must be between `start()` and `end()`.
 
 Async. Paste the schematic in `world` (prismarine-world) at the `at` (vec3) location.
 
-#### Schematic.read(buffer)
+#### Schematic.read(buffer, version=null)
 
-Static, async. Return a Schematic instance, read from the buffer.
+Static, async. Return a Schematic instance, read from the buffer. If version is not set, the loader try to autodetect the version from the file.
 
 #### Schematic.write()
 
