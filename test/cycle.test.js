@@ -19,7 +19,7 @@ describe('cycle test', () => {
 
         const schematic2 = await Schematic.read(await fs.readFile(tmpFile))
 
-        fss.rmSync(tmpFile)
+        fss.unlinkSync(tmpFile)
 
         assert.deepStrictEqual(schematic.blocks, schematic2.blocks)
         assert.deepStrictEqual(schematic.version, schematic2.version)
