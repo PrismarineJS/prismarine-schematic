@@ -1,6 +1,6 @@
 {
   "name": "prismarine-schematic",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Read, write and manipulate minecraft schematics",
   "main": "index.js",
   "scripts": {
@@ -24,8 +24,8 @@
   },
   "homepage": "https://github.com/PrismarineJS/prismarine-schematic#readme",
   "devDependencies": {
-    "prismarine-schematic": "file:.",
     "jest": "^26.1.0",
+    "prismarine-schematic": "file:.",
     "standard": "^16.0.1"
   },
   "dependencies": {
