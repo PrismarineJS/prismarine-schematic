@@ -17,7 +17,7 @@ function getSchematic (url, cb) {
 }
 
 // load and paste a schematic
-getSchematic('schematics/smallhouse1.schem', async (data) => {
+getSchematic('schematics/viking-house1.schematic', async (data) => {
   const schem = await Schematic.read(Buffer.from(data), '1.16.4')
 
   const version = schem.version

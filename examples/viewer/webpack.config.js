@@ -20,9 +20,7 @@ const config = {
   plugins: [
     // fix "process is not defined" error:
     new webpack.ProvidePlugin({
-      process: 'process/browser'
-    }),
-    new webpack.ProvidePlugin({
+      process: 'process/browser',
       Buffer: ['buffer', 'Buffer']
     }),
     new webpack.NormalModuleReplacementPlugin(
