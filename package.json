@@ -29,6 +29,11 @@
     "standard": "^16.0.1",
     "process": "^0.11.10"
   },
+  "standard": {
+    "ignore": [
+      "/examples/viewer/**/public/*.js"
+    ]
+  },
   "dependencies": {
     "minecraft-data": "^2.70.2",
     "prismarine-block": "^1.7.2",
