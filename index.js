@@ -38,17 +38,11 @@ class Schematic {
   }
 
   async paste (world, at) {
-    const cursor = new Vec3(0, 0, 0)
-    const start = this.start()
-    const end = this.end()
-    for (cursor.y = start.y; cursor.y < end.y; cursor.y++) {
-      for (cursor.z = start.z; cursor.z < end.z; cursor.z++) {
-        for (cursor.x = start.x; cursor.x < end.x; cursor.x++) {
-          const pos = at.plus(cursor)
-          await world.setBlockStateId(pos, this.getBlockStateId(cursor))
-        }
-      }
-    }
+    world.initialize((x, y, z) => {
+      const block = this.getBlock((new Vec3(x, y, z)).plus(this.start()))
+      block.skyLight = 15
+      return block
+    }, this.size.z, this.size.x, this.size.y, at)
   }
 
   static async read (buffer, version = null) {
