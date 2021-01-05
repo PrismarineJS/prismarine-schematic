@@ -56,6 +56,10 @@ Get the stateId of the block at `pos`. `pos` must be between `start()` and `end(
 
 Get the block at `pos`. `pos` must be between `start()` and `end()`.
 
+#### Schematic.copy(world, start, end, offset, version)
+
+Static, async. Make a schematic instance from `world` (prismarine-world) between `start` and `end` (vec3), `offset` will be the offset of the schematic, `version` must match `world`'s version.
+
 #### Schematic.paste(world, at)
 
 Async. Paste the schematic in `world` (prismarine-world) at the `at` (vec3) location.

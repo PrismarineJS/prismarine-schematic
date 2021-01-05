@@ -26,6 +26,7 @@
   "devDependencies": {
     "jest": "^26.1.0",
     "prismarine-schematic": "file:.",
+    "prismarine-chunk": "^1.22.0",
     "standard": "^16.0.1",
     "process": "^0.11.10"
   },

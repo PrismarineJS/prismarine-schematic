@@ -23,7 +23,7 @@ class Schematic {
   }
 
   end () {
-    return this.start().plus(this.size)
+    return this.start().plus(this.size).offset(-1, -1, -1)
   }
 
   getBlockStateId (pos) {
@@ -37,12 +37,33 @@ class Schematic {
     return this.Block.fromStateId(this.getBlockStateId(pos), 0)
   }
 
+  static async copy (world, start, end, offset, version) {
+    const size = end.minus(start).offset(1, 1, 1)
+    const palette = []
+    const blocks = []
+    const cursor = new Vec3(0, 0, 0)
+    for (cursor.y = start.y; cursor.y <= end.y; cursor.y++) {
+      for (cursor.z = start.z; cursor.z <= end.z; cursor.z++) {
+        for (cursor.x = start.x; cursor.x <= end.x; cursor.x++) {
+          const stateId = await world.getBlockStateId(cursor)
+          let id = palette.indexOf(stateId)
+          if (id === -1) {
+            id = palette.length
+            palette.push(stateId)
+          }
+          blocks.push(id)
+        }
+      }
+    }
+    return new Schematic(version, size, offset, palette, blocks)
+  }
+
   async paste (world, at) {
     world.initialize((x, y, z) => {
-      const block = this.getBlock((new Vec3(x, y, z)).plus(this.start()))
+      const block = this.getBlock(new Vec3(x, y, z).plus(this.start()))
       block.skyLight = 15
       return block
-    }, this.size.z, this.size.x, this.size.y, at)
+    }, this.size.z, this.size.x, this.size.y, at.plus(this.start()))
   }
 
   static async read (buffer, version = null) {
