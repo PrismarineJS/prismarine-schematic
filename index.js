@@ -7,7 +7,6 @@ const { Vec3 } = require('vec3')
 
 const sponge = require('./lib/spongeSchematic')
 const mcedit = require('./lib/mceditSchematic')
-const { Block } = require('prismarine-block') // eslint-disable-line
 
 class Schematic {
   constructor (version, size, offset, palette, blocks) {
@@ -82,20 +81,21 @@ class Schematic {
   }
 
   /**
-   * similar to js map, loop over all schem blocks
-   * @param {(block: Block, pos: Vec3, index: number) => {}} callback
+   * similar to js forEach, loop over all schem blocks
+   * @param {(block: any, pos: Vec3, index: number) => {}} cb
+   * @returns {any} promise if cb is async
    */
-  async map (callback) {
+  async forEach (cb) {
     let counter = 0
-    const { startX, startY, startZ } = this.start()
-    const { endX, endY, endZ } = this.end()
+    const { x: startX, y: startY, z: startZ } = this.start()
+    const { x: endX, y: endY, z: endZ } = this.end()
     for (let y = startY; y <= endY; y++) {
       for (let z = startZ; z <= endZ; z++) {
         for (let x = startX; x <= endX; x++) {
           const pos = new Vec3(x, y, z)
-          const block = this.getBlock(new Vec3(x, y, z))
+          const block = this.getBlock(pos)
           counter++
-          await callback(block, pos, counter)
+          await cb(block, pos, counter)
         }
       }
     }
