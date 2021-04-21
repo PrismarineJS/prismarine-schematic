@@ -7,7 +7,7 @@ const { Vec3 } = require('vec3')
 
 const sponge = require('./lib/spongeSchematic')
 const mcedit = require('./lib/mceditSchematic')
-const { Block } = require('prismarine-block')
+const { Block } = require('prismarine-block') // eslint-disable-line
 
 class Schematic {
   constructor (version, size, offset, palette, blocks) {
@@ -80,19 +80,22 @@ class Schematic {
     const schem = sponge.write(this)
     return gzip(nbt.writeUncompressed(schem))
   }
+
   /**
    * similar to js map, loop over all schem blocks
-   * @param {(block: Block, pos: Vec3, counter: number) => {}} f 
+   * @param {(block: Block, pos: Vec3, counter: number) => {}} callback
    */
-  async map (f) {
-    let counter = 0;
-    for(let y = start.y; y <= end.y; y++){
-      for(let z = start.z; z <= end.z; z++){
-        for(let x = start.x; x <= end.x; x++){
+  async map (callback) {
+    let counter = 0
+    const { startX, startY, startZ } = this.start()
+    const { endX, endY, endZ } = this.end()
+    for (let y = startY; y <= endY; y++) {
+      for (let z = startZ; z <= endZ; z++) {
+        for (let x = startX; x <= endX; x++) {
           const pos = new Vec3(x, y, z)
-          const block = schem.getBlock(new Vec3(x, y, z))
+          const block = this.getBlock(new Vec3(x, y, z))
           counter++
-          await f(block, pos, counter)
+          await callback(block, pos, counter)
         }
       }
     }
