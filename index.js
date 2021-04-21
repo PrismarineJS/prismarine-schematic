@@ -83,7 +83,7 @@ class Schematic {
 
   /**
    * similar to js map, loop over all schem blocks
-   * @param {(block: Block, pos: Vec3, counter: number) => {}} callback
+   * @param {(block: Block, pos: Vec3, index: number) => {}} callback
    */
   async map (callback) {
     let counter = 0
