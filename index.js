@@ -83,11 +83,10 @@ class Schematic {
 
   /**
    * similar to js forEach, loop over all schem blocks
-   * @param {(block: any, pos: Vec3, index: number) => {}} cb
+   * @param {(block: any, pos: Vec3) => {}} cb
    * @returns {Promise<any>}
    */
   async forEach (cb) {
-    let counter = 0
     const { x: startX, y: startY, z: startZ } = this.start()
     const { x: endX, y: endY, z: endZ } = this.end()
     for (let y = startY; y <= endY; y++) {
@@ -95,8 +94,7 @@ class Schematic {
         for (let x = startX; x <= endX; x++) {
           const pos = new Vec3(x, y, z)
           const block = this.getBlock(pos)
-          counter++
-          await cb(block, pos, counter)
+          await cb(block, pos)
         }
       }
     }
@@ -104,11 +102,10 @@ class Schematic {
 
   /**
    * similar to js forEach, loop over all schem blocks
-   * @param {(block: any, pos: Vec3, index: number) => {}} cb
+   * @param {(block: any, pos: Vec3) => {}} cb
    * @returns {Promise<any>}
    */
   async map (cb) {
-    let counter = 0
     const outData = []
     const { x: startX, y: startY, z: startZ } = this.start()
     const { x: endX, y: endY, z: endZ } = this.end()
@@ -117,8 +114,7 @@ class Schematic {
         for (let x = startX; x <= endX; x++) {
           const pos = new Vec3(x, y, z)
           const block = this.getBlock(pos)
-          counter++
-          outData.push(await cb(block, pos, counter))
+          outData.push(await cb(block, pos))
         }
       }
     }
