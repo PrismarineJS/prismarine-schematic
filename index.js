@@ -4,6 +4,7 @@ const parseNbt = promisify(nbt.parse)
 const zlib = require('zlib')
 const gzip = promisify(zlib.gzip)
 const { Vec3 } = require('vec3')
+const mcData = require('minecraft-data')
 
 const sponge = require('./lib/spongeSchematic')
 const mcedit = require('./lib/mceditSchematic')
@@ -83,7 +84,7 @@ class Schematic {
   /**
    * similar to js forEach, loop over all schem blocks
    * @param {(block: any, pos: Vec3, index: number) => {}} cb
-   * @returns {any} promise if cb is async
+   * @returns {Promise<any>}
    */
   async forEach (cb) {
     let counter = 0
@@ -99,6 +100,54 @@ class Schematic {
         }
       }
     }
+  }
+
+  /**
+   * similar to js forEach, loop over all schem blocks
+   * @param {(block: any, pos: Vec3, index: number) => {}} cb
+   * @returns {Promise<any>}
+   */
+  async map (cb) {
+    let counter = 0
+    const outData = []
+    const { x: startX, y: startY, z: startZ } = this.start()
+    const { x: endX, y: endY, z: endZ } = this.end()
+    for (let y = startY; y <= endY; y++) {
+      for (let z = startZ; z <= endZ; z++) {
+        for (let x = startX; x <= endX; x++) {
+          const pos = new Vec3(x, y, z)
+          const block = this.getBlock(pos)
+          counter++
+          outData.push(await cb(block, pos, counter))
+        }
+      }
+    }
+    return outData
+  }
+
+  /**
+   * makes an array of setblock commands for 1.11+
+   * @param {Vec3} offset x, y, z offset for commands
+   * @param {Vec3} newBlockState mc ver 1.11+
+   * @returns {Array<string>} array of commands
+   */
+  async makeWithCommands (offset) {
+    const cmds = []
+    await this.forEach(async (block, pos) => {
+      const { x, y, z } = pos.offset(offset.x, offset.y, offset.z)
+      const versionedMcData = mcData(this.version)
+      let state
+      if (versionedMcData.isNewerOrEqualTo('1.13')) {
+        state = Object.entries(block.getProperties()).map(([key, value]) => `${key}="${value}"`).join(',')
+        state = state ? ` [${state}]` : ''
+      } else if (versionedMcData.isNewerOrEqualTo('1.11')) {
+        state = ` ${block.metadata}`
+      } else { // <1.111
+        state = ''
+      }
+      cmds.push(`/setblock ${x} ${y} ${z} ${block.name}${state}`)
+    })
+    return cmds
   }
 }
 
