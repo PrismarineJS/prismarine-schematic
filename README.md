@@ -48,6 +48,24 @@ Return the start coordinate of this schematic.
 
 Return the end coordinate of this schematic.
 
+#### Schematic.forEach(cb)
+
+calls the callback on every block in the schematic. the callback is called with args `(block, pos)`.
+
+#### Schematic.map(cb)
+
+returns an array of the results from calling the callback on every block in the schematic. the callback is called with args `(block, pos)`.
+
+#### Schematic.makeWithCommands(offset)
+
+returns an array of commands to run to make the schematic in a vanilla server. the offset is a vec3 instance that is applied by .offset on each block in the schematic.
+
+* In 1.13+, there are block states as an array in the commands
+
+* In 1.11+, there are block states as metadata as a number in the commands
+
+* In <1.11, there is no block state, just the block in the commands
+
 #### Schematic.getBlockStateId(pos)
 
 Get the stateId of the block at `pos`. `pos` must be between `start()` and `end()`.
