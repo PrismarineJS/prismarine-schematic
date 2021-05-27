@@ -56,7 +56,9 @@ calls the callback on every block in the schematic. the callback is called with 
 
 returns an array of the results from calling the callback on every block in the schematic. the callback is called with args `(block, pos)`.
 
-#### Schematic.makeWithCommands(offset)
+#### Schematic.makeWithCommands(offset, platform = 'pc')
+
+* `platform` is a optional parameter. It can be `pc` (default) or `pe` to account for a different command style between Java and Pocket Edition.
 
 returns an array of commands to run to make the schematic in a vanilla server. the offset is a vec3 instance that is applied by .offset on each block in the schematic.
 
@@ -65,6 +67,7 @@ returns an array of commands to run to make the schematic in a vanilla server. t
 * In 1.11+, there are block states as metadata as a number in the commands
 
 * In <1.11, there is no block state, just the block in the commands
+
 
 #### Schematic.getBlockStateId(pos)
 
