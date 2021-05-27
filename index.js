@@ -135,7 +135,7 @@ class Schematic {
       let state
       if (versionedMcData.isNewerOrEqualTo('1.13')) {
         state = Object.entries(block.getProperties()).map(([key, value]) => `${key}="${value}"`).join(',')
-        state = state ? ` [${state}]` : ''
+        state = state ? `[${state}]` : ''
       } else if (versionedMcData.isNewerOrEqualTo('1.11')) {
         state = ` ${block.metadata}`
       } else { // <1.111
