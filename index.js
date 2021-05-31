@@ -137,10 +137,10 @@ class Schematic {
         state = Object.entries(block.getProperties()).map(([key, value]) => `${key}="${value}"`).join(',')
         if (platform === 'pc') {
           state = state ? `[${state}]` : ''
-        } else if(platform === 'pe') {
+        } else if (platform === 'pe') {
           state = state ? ` [${state}]` : ''
         } else {
-          throw Error('Invalid Platform ' + platform) 
+          throw Error('Invalid Platform ' + platform)
         }
       } else if (versionedMcData.isNewerOrEqualTo('1.11')) {
         state = ` ${block.metadata}`
