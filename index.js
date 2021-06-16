@@ -127,7 +127,7 @@ class Schematic {
    * @param {Vec3} newBlockState mc ver 1.11+
    * @returns {Array<string>} array of commands
    */
-  async makeWithCommands (offset) {
+  async makeWithCommands (offset, platform = 'pc') {
     const cmds = []
     await this.forEach(async (block, pos) => {
       const { x, y, z } = pos.offset(offset.x, offset.y, offset.z)
@@ -135,7 +135,13 @@ class Schematic {
       let state
       if (versionedMcData.isNewerOrEqualTo('1.13')) {
         state = Object.entries(block.getProperties()).map(([key, value]) => `${key}="${value}"`).join(',')
-        state = state ? ` [${state}]` : ''
+        if (platform === 'pc') {
+          state = state ? `[${state}]` : ''
+        } else if (platform === 'pe') {
+          state = state ? ` [${state}]` : ''
+        } else {
+          throw Error('Invalid Platform ' + platform)
+        }
       } else if (versionedMcData.isNewerOrEqualTo('1.11')) {
         state = ` ${block.metadata}`
       } else { // <1.111
