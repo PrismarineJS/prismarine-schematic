@@ -77,6 +77,10 @@ Get the stateId of the block at `pos`. `pos` must be between `start()` and `end(
 
 Get the block at `pos`. `pos` must be between `start()` and `end()`.
 
+#### Schematic.setBlock(pos, block)
+
+Set a block at `pos` to a block of Block instance (see prismarine-block). If block is not given or nullish setBlock removes the block at `pos`.
+
 #### Schematic.copy(world, start, end, offset, version)
 
 Static, async. Make a schematic instance from `world` (prismarine-world) between `start` and `end` (vec3), `offset` will be the offset of the schematic, `version` must match `world`'s version.

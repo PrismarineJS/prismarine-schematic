@@ -38,6 +38,39 @@ class Schematic {
     return this.Block.fromStateId(this.getBlockStateId(pos), 0)
   }
 
+  /**
+   *
+   * @param {import('vec3').Vec3} pos Pos
+   * @param {import('prismarine-block').Block} block Block instance
+   */
+  setBlock (pos, block) {
+    const p = pos.minus(this.offset).floor()
+    if (p.x < 0 || p.y < 0 || p.z < 0 || p.x >= this.size.x || p.y >= this.size.y || p.z >= this.size.z) throw new Error('outside of schematic size')
+    const blockIndex = p.x + p.z * this.size.x + p.y * this.size.x * this.size.z
+    let stateId
+    if (block !== null && block !== undefined) {
+      stateId = block.stateId ?? (block.type << 4) + block.metadata // <1.13 does not have stateId in mcData (mcData bug)
+    } else {
+      stateId = 0
+    }
+    const oldStateId = this.getBlockStateId(pos)
+    let id = this.palette.indexOf(stateId)
+    const oldId = this.palette.indexOf(oldStateId)
+    if (id === -1) {
+      id = this.palette.length
+      this.palette.push(stateId)
+    }
+    this.blocks[blockIndex] = id
+    // Check if the old block is no longer in the blocks list. If it is not in the list remove it from the palette and shift blocks id's by -1 that come after it.
+    if (oldStateId === undefined || oldStateId === null) return
+    const paletteIndex = this.palette.indexOf(oldStateId)
+    if (this.blocks.filter(b => b === oldId).length !== 0) return
+    this.palette.splice(paletteIndex, 1)
+    for (let i = 0; i < this.blocks.length; i++) {
+      if (this.blocks[i] >= paletteIndex) this.blocks[i] = this.blocks[i] - 1
+    }
+  }
+
   static async copy (world, start, end, offset, version) {
     const size = end.minus(start).offset(1, 1, 1)
     const palette = []
