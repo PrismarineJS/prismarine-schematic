@@ -24,3 +24,20 @@ describe('map test', () => {
     expect(data[0].name).toStrictEqual('grass_block')
   })
 })
+
+describe('to-fromJSON', () => {
+  test('stringify viking house', async () => {
+    const schem = await Schematic.read(buffer, '1.16.4')
+    const data = schem.toJSON()
+    expect(data.length > 0).toBeTruthy()
+  })
+
+  test('parse viking house', async () => {
+    const schem = await Schematic.read(buffer, '1.16.4')
+    const data = schem.toJSON()
+    const schemParsed = Schematic.fromJSON(data)
+    expect(schemParsed).not.toBeNull()
+    expect(schemParsed.palette.length).toStrictEqual(schem.palette.length)
+    expect(schemParsed.blocks.length).toStrictEqual(schem.blocks.length)
+  })
+})
