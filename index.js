@@ -212,6 +212,39 @@ class Schematic {
     })
     return cmds
   }
+
+  toJSON (space) {
+    return JSON.stringify({
+      version: this.version,
+      size: {
+        x: this.size.x,
+        y: this.size.y,
+        z: this.size.z
+      },
+      offset: {
+        x: this.offset.x,
+        y: this.offset.y,
+        z: this.offset.z
+      },
+      palette: this.palette,
+      blocks: this.blocks
+    }, null, space)
+  }
+
+  static fromJSON (string) {
+    let obj
+    try {
+      obj = JSON.parse(string)
+    } catch (e) {
+      console.error(e)
+      return null
+    }
+    const { version, size, offset, palette, blocks } = obj
+    const { x: sizeX, y: sizeY, z: sizeZ } = size || {}
+    const { x: offsetX, y: offsetY, z: offsetZ } = offset || {}
+    if (!version || !sizeX || !sizeY || !sizeZ || !offsetX || !offsetY || !offsetZ || !palette || !blocks) return null
+    return new Schematic(version, new Vec3(sizeX, sizeY, sizeZ), new Vec3(offsetX, offsetY, offsetZ), palette, blocks)
+  }
 }
 
 module.exports = { Schematic }
