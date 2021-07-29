@@ -179,9 +179,17 @@ class Schematic {
       return null
     }
     const { version, size, offset, palette, blocks } = obj
-    const { x: sizeX, y: sizeY, z: sizeZ } = size || {}
-    const { x: offsetX, y: offsetY, z: offsetZ } = offset || {}
-    if (!version || !sizeX || !sizeY || !sizeZ || !offsetX || !offsetY || !offsetZ || !palette || !blocks) return null
+    const sizeX = Number(size?.x)
+    const sizeY = Number(size?.y)
+    const sizeZ = Number(size?.z)
+    const offsetX = Number(offset?.x)
+    const offsetY = Number(offset?.y)
+    const offsetZ = Number(offset?.z)
+    if (!version || isNaN(sizeX) || isNaN(sizeY) || isNaN(sizeZ) || isNaN(offsetX) || isNaN(offsetY) || isNaN(offsetZ) || !palette || !blocks) {
+      throw new Error('Parsing failed missing attribute ' +
+        (!version ? 'version ' : '') + (isNaN(sizeX) ? 'size: x ' : '') + (isNaN(sizeY) ? 'size: y ' : '') + (isNaN(sizeZ) ? 'size: z ' : '') +
+        (isNaN(offsetX) ? 'offset: x ' : '') + (isNaN(offsetY) ? 'offset: y ' : '') + (isNaN(offsetZ) ? 'offset: z ' : '') + (!palette ? 'palette ' : '') + (!blocks ? 'blocks ' : ''))
+    }
     return new Schematic(version, new Vec3(sizeX, sizeY, sizeZ), new Vec3(offsetX, offsetY, offsetZ), palette, blocks)
   }
 }
