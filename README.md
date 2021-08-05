@@ -50,9 +50,17 @@ Return the end coordinate of this schematic.
 
 #### Schematic.forEach(cb)
 
+calls the callback on every block in the schematic and awaits the callback function. the callback is called with args `(block, pos)`. Returns a promise.
+
+#### Schematic.forEachSync(cb)
+
 calls the callback on every block in the schematic. the callback is called with args `(block, pos)`.
 
 #### Schematic.map(cb)
+
+returns an array of the results from calling the callback on every block in the schematic and awaiting the callback function. the callback is called with args `(block, pos)`. Returns a promise.
+
+#### Schematic.mapSync(cb)
 
 returns an array of the results from calling the callback on every block in the schematic. the callback is called with args `(block, pos)`.
 
