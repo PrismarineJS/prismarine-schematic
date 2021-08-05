@@ -145,7 +145,7 @@ class Schematic {
    * @param {(block: any, pos: Vec3) => {}} cb
    * @returns {any}
    */
-   async mapSync (cb) {
+  async mapSync (cb) {
     const outData = []
     const { x: startX, y: startY, z: startZ } = this.start()
     const { x: endX, y: endY, z: endZ } = this.end()
