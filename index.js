@@ -82,7 +82,7 @@ class Schematic {
   }
 
   /**
-   * similar to js forEach, loop over all schem blocks
+   * similar to js forEach, loop over all schem blocks awaiting the callback function
    * @param {(block: any, pos: Vec3) => {}} cb
    * @returns {Promise<any>}
    */
@@ -101,7 +101,26 @@ class Schematic {
   }
 
   /**
-   * similar to js forEach, loop over all schem blocks
+   * similar to js forEach, loop over all schem blocks synchronously
+   * @param {(block: any, pos: Vec3) => {}} cb
+   * @returns
+   */
+  forEachSync (cb) {
+    const { x: startX, y: startY, z: startZ } = this.start()
+    const { x: endX, y: endY, z: endZ } = this.end()
+    for (let y = startY; y <= endY; y++) {
+      for (let z = startZ; z <= endZ; z++) {
+        for (let x = startX; x <= endX; x++) {
+          const pos = new Vec3(x, y, z)
+          const block = this.getBlock(pos)
+          cb(block, pos)
+        }
+      }
+    }
+  }
+
+  /**
+   * similar to js forEach, loop over all schem blocks awaiting the callback function
    * @param {(block: any, pos: Vec3) => {}} cb
    * @returns {Promise<any>}
    */
@@ -115,6 +134,27 @@ class Schematic {
           const pos = new Vec3(x, y, z)
           const block = this.getBlock(pos)
           outData.push(await cb(block, pos))
+        }
+      }
+    }
+    return outData
+  }
+
+  /**
+   * similar to js forEach, loop over all schem blocks synchronously
+   * @param {(block: any, pos: Vec3) => {}} cb
+   * @returns {any}
+   */
+   async mapSync (cb) {
+    const outData = []
+    const { x: startX, y: startY, z: startZ } = this.start()
+    const { x: endX, y: endY, z: endZ } = this.end()
+    for (let y = startY; y <= endY; y++) {
+      for (let z = startZ; z <= endZ; z++) {
+        for (let x = startX; x <= endX; x++) {
+          const pos = new Vec3(x, y, z)
+          const block = this.getBlock(pos)
+          outData.push(cb(block, pos))
         }
       }
     }
