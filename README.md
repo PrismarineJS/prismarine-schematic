@@ -96,3 +96,11 @@ Static, async. Return a Schematic instance, read from the buffer. If version is 
 #### Schematic.write()
 
 Async. Return a buffer encoding this schematic
+
+#### Schematic.toJSON(space?)
+
+Returns `string` representation off the schematic. `space` represents the space option for `JSON.stringify()`.
+
+#### Schematic.fromJSON()
+
+Returns a new `Schematic` instance by parsing a stringified schematic. Returns `null` on error.
