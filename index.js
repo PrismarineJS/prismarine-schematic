@@ -38,6 +38,67 @@ class Schematic {
     return this.Block.fromStateId(this.getBlockStateId(pos), 0)
   }
 
+  /**
+   *
+   * @param {import('vec3').Vec3} pos Pos
+   * @param {import('prismarine-block').Block|null} block Block instance
+   */
+  setBlock (pos, block) {
+    /**
+     * Possible scenarios:
+     *                                                 | A) Occurs in palette:              | B) Does not occurs in palette:
+     * 1. Replaces all blocks entries of one kind:     | Tick down block entries            | Replace blocks & palette entry
+     *                                                 |                                    |
+     * 2. Replaces not all blocks entries of one kind: | Replace blocks entry with palette  | Append to palette & set blocks entry
+     */
+    const p = pos.minus(this.offset).floor()
+    if (p.x < 0 || p.y < 0 || p.z < 0 || p.x >= this.size.x || p.y >= this.size.y || p.z >= this.size.z) throw new Error('outside of schematic size')
+    const blockIndex = p.x + p.z * this.size.x + p.y * this.size.x * this.size.z
+    const oldStateId = this.getBlockStateId(pos) || 0
+    const oldPaletteIndex = this.palette.indexOf(oldStateId)
+    let stateId
+    if (block === null || block === undefined) {
+      stateId = 0
+    } else {
+      stateId = block.stateId ?? (block.type << 4) + block.metadata // <1.13 does not have stateId in Block (mcData or prismarine-block bug)
+    }
+    const removesAll = oldPaletteIndex !== -1 && this.blocks.filter(b => b === oldPaletteIndex).length === 1 && this.blocks.length > 0
+    let id
+    if (removesAll) {
+      id = this.palette.indexOf(stateId)
+      if (id === -1) {
+        // Case 1B
+        // Replace the current palette index so we don't have to shift entries around
+        id = this.palette.indexOf(oldStateId)
+        this.palette[id] = stateId
+      } else {
+        // Case 1A
+        // We have to shift all entries in blocks to not leave any holes in the palette
+        const oldIndex = this.palette.indexOf(oldStateId)
+        this.palette.splice(oldIndex, 1)
+        for (let i = 0; i < this.blocks.length; i++) {
+          if (this.blocks[i] > oldIndex) this.blocks[i] -= 1
+        }
+        this.blocks[blockIndex] = id
+      }
+    } else {
+      id = this.palette.indexOf(stateId)
+      if (id === -1) {
+        // Case 2B
+        // Replace the blocks entry and append to end of palette
+        id = this.palette.length
+        this.blocks[blockIndex] = id
+        this.palette.push(stateId)
+      } else {
+        // Case 2A
+        // Replace blocks entry with id
+        this.blocks[blockIndex] = id
+      }
+      if (id === -1) id = this.palette.length
+      this.palette[id] = stateId
+    }
+  }
+
   static async copy (world, start, end, offset, version) {
     const size = end.minus(start).offset(1, 1, 1)
     const palette = []
