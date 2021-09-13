@@ -52,6 +52,7 @@ describe('editing test', () => {
     expect(schem.blocks.filter(b => !!b).length).toStrictEqual(1)
   })
 })
+
 describe('to-fromJSON', () => {
   test('stringify viking house', async () => {
     const schem = await Schematic.read(buffer, '1.16.4')
