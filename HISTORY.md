@@ -1,5 +1,9 @@
 ## History
 
+## 1.2.2
+* Add setBlock function to Schematic (#35)
+* Add to/from - JSON (#36)
+
 ### 1.2.1
 * use legacy from mcdata (@rom1504)
 * Fallback to stone instead of air (#24)
