@@ -1,5 +1,8 @@
 ## History
 
+## 1.2.3
+* Update mcdata
+
 ## 1.2.2
 * Add setBlock function to Schematic (#35)
 * Add to/from - JSON (#36)
