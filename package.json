@@ -36,7 +36,7 @@
     ]
   },
   "dependencies": {
-    "minecraft-data": "^2.84.0",
+    "minecraft-data": "^3.0.0",
     "prismarine-block": "^1.7.2",
     "prismarine-nbt": "^2.0.0",
     "prismarine-world": "^3.1.1",
