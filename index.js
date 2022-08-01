@@ -10,12 +10,13 @@ const sponge = require('./lib/spongeSchematic')
 const mcedit = require('./lib/mceditSchematic')
 
 class Schematic {
-  constructor (version, size, offset, palette, blocks) {
+  constructor (version, size, offset, palette, blocks, blockEntities) {
     this.version = version
     this.size = size
     this.offset = offset
     this.palette = palette
     this.blocks = blocks
+    this.blockEntities = blockEntities
     this.Block = require('prismarine-block')(version)
   }
 
