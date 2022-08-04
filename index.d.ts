@@ -5,8 +5,8 @@ export class Schematic {
     public readonly version: string;
     public readonly size: Vec3;
     public readonly offset: Vec3;
-    private palette: number[];
-    private blocks: number[];
+    public palette: number[];
+    public blocks: number[];
     public readonly Block: typeof Block;
 
     constructor ( version: string, size: Vec3, offset: Vec3, palette: number[], blocks: number[] );
