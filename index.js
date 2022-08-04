@@ -138,7 +138,13 @@ class Schematic {
   }
 
   async write () {
-    const schem = sponge.write(this)
+    let schem
+    const versionedMcData = mcData(this.version)
+    if (versionedMcData.isNewerOrEqualTo('1.13')) {
+      schem = sponge.write(this)
+    } else {
+      schem = mcedit.write(this)
+    }
     return gzip(nbt.writeUncompressed(schem))
   }
 
