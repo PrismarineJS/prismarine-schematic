@@ -8,21 +8,22 @@ const { Vec3 } = require('vec3')
 const buffer = fs.readFileSync(path.join(__dirname, 'schematics', 'viking-house1.schematic'))
 
 describe('foreach test', () => {
+  /** @type {import("prismarine-block").Block[]} */
   const data = []
   test('viking house', async () => {
-    const schem = await Schematic.read(buffer, '1.16.4')
+    const schem = await Schematic.read(buffer, '1.12.2')
     schem.forEach((block, pos) => {
       data.push(block)
     })
-    expect(data[0].name).toStrictEqual('grass_block')
+    expect(data[0].name).toStrictEqual('grass')
   })
 })
 
 describe('map test', () => {
   test('viking house', async () => {
-    const schem = await Schematic.read(buffer, '1.16.4')
+    const schem = await Schematic.read(buffer, '1.12.2')
     const data = await schem.map((block) => block)
-    expect(data[0].name).toStrictEqual('grass_block')
+    expect(data[0].name).toStrictEqual('grass')
   })
 })
 
@@ -55,13 +56,13 @@ describe('editing test', () => {
 
 describe('to-fromJSON', () => {
   test('stringify viking house', async () => {
-    const schem = await Schematic.read(buffer, '1.16.4')
+    const schem = await Schematic.read(buffer, '1.12.2')
     const data = schem.toJSON()
     expect(data.length > 0).toBeTruthy()
   })
 
   test('parse viking house', async () => {
-    const schem = await Schematic.read(buffer, '1.16.4')
+    const schem = await Schematic.read(buffer, '1.12.2')
     const data = schem.toJSON()
     const schemParsed = Schematic.fromJSON(data)
     expect(schemParsed).not.toBeNull()
