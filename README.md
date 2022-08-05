@@ -10,7 +10,7 @@ Read, write and manipulate minecraft schematics.
 
 Supported formats:
 * [Sponge](https://github.com/SpongePowered/Schematic-Specification) (Read/Write)
-* [MCEdit](https://minecraft.gamepedia.com/Schematic_file_format) (Read/Write)
+* [MCEdit](https://minecraft.fandom.com/wiki/Schematic_file_format) (Read/Write)
 
 ## Usage
 
