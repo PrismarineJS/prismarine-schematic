@@ -24,7 +24,7 @@
   },
   "homepage": "https://github.com/PrismarineJS/prismarine-schematic#readme",
   "devDependencies": {
-    "jest": "^28.1.0",
+    "jest": "^29.0.3",
     "prismarine-schematic": "file:.",
     "prismarine-chunk": "^1.22.0",
     "standard": "^17.0.0",
