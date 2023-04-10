@@ -5,6 +5,7 @@ export class Schematic {
     public readonly version: string;
     public readonly size: Vec3;
     public readonly offset: Vec3;
+    public blockEntities: any;
     public palette: number[];
     public blocks: number[];
     public readonly Block: typeof Block;
