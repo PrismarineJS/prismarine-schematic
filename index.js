@@ -165,6 +165,43 @@ class Schematic {
   /**
    * similar to js forEach, loop over all schem blocks
    * @param {(block: any, pos: Vec3) => {}} cb
+   * @param {boolean} return_air
+   */
+  forEachFast(cb, return_air = false) {
+    const { x: startX, y: startY, z: startZ } = this.start()
+    const { x: endX, y: endY, z: endZ } = this.end()
+    const pos = new Vec3(0, 0, 0)
+
+    let prevStateId = -1
+    let prevBlock = null
+
+    const getBlock = (pos) => {
+        const stateId = this.getBlockStateId(pos)
+        if(prevStateId == stateId) {
+            return prevBlock;
+        }
+        prevStateId = stateId
+        return prevBlock = this.Block.fromStateId(stateId, 0)
+    }
+
+    for (let y = startY; y <= endY; y++) {
+      for (let z = startZ; z <= endZ; z++) {
+        for (let x = startX; x <= endX; x++) {
+          pos.x = x
+          pos.y = y
+          pos.z = z
+          const block = getBlock(pos)
+          if(return_air || block.type != 0) {
+            cb(block, pos)
+          }
+        }
+      }
+    }
+  }
+
+  /**
+   * similar to js forEach, loop over all schem blocks
+   * @param {(block: any, pos: Vec3) => {}} cb
    * @returns {Promise<any>}
    */
   async map (cb) {
