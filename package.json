@@ -1,5 +1,5 @@
 {
-  "name": "prismarine-schematic",
+  "name": "madcraft-schematic-reader",
   "version": "1.2.3",
   "description": "Read, write and manipulate minecraft schematics",
   "main": "index.js",
@@ -11,7 +11,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/PrismarineJS/prismarine-schematic.git"
+    "url": "git+https://github.com/sciner/prismarine-schematic.git"
   },
   "keywords": [
     "prismarine",
@@ -20,9 +20,9 @@
   "author": "Romain Beaumont",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/PrismarineJS/prismarine-schematic/issues"
+    "url": "https://github.com/sciner/prismarine-schematic/issues"
   },
-  "homepage": "https://github.com/PrismarineJS/prismarine-schematic#readme",
+  "homepage": "https://github.com/sciner/prismarine-schematic#readme",
   "devDependencies": {
     "jest": "^29.1.1",
     "prismarine-schematic": "file:.",
