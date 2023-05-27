@@ -1,6 +1,6 @@
 {
   "name": "madcraft-schematic-reader",
-  "version": "1.2.3",
+  "version": "1.2.4",
   "description": "Read, write and manipulate minecraft schematics",
   "main": "index.js",
   "scripts": {
