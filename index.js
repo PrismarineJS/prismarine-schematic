@@ -192,7 +192,7 @@ class Schematic {
           pos.z = z
           const block = getBlock(pos)
           if(return_air || block.type != 0) {
-            cb(block, pos)
+            cb(block, pos, prevStateId)
           }
         }
       }
