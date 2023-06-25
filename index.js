@@ -131,6 +131,10 @@ class Schematic {
 
   static async read (buffer, version = null) {
     const schem = nbt.simplify(await parseNbt(buffer))
+    return this.parse(schem, version)
+  }
+
+  static parse(schem, version = null) {
     try {
       return sponge.read(schem, version)
     } catch {
