@@ -30,5 +30,6 @@ export class Schematic {
 
     static copy( world: any, start: Vec3, end: Vec3, offset: Vec3, version: string ): Promise<Schematic>;
     static read( buffer: Buffer, version?: string ): Promise<Schematic>;
+    static parse( schem: Dict, version?: string ): Schematic;
     static fromJSON( string: string ): Schematic;
 }
