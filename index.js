@@ -8,6 +8,7 @@ const mcData = require('minecraft-data')
 
 const sponge = require('./lib/spongeSchematic')
 const mcedit = require('./lib/mceditSchematic')
+const { parseBlockName } = require('./lib/states')
 
 class Schematic {
   constructor (version, size, offset, palette, blocks, blockEntities) {
@@ -140,6 +141,18 @@ class Schematic {
     } catch {
       return mcedit.read(schem, version)
     }
+  }
+
+  static async readNBT (buffer) {
+    return nbt.simplify(await parseNbt(buffer))
+  }
+
+  static parseSponge (nbt, version = null) {
+    return sponge.read(nbt, version)
+  }
+
+  static parseMcEdit (nbt, version = null) {
+    return mcedit.read(nbt, version)
   }
 
   async write () {
@@ -297,4 +310,4 @@ class Schematic {
   }
 }
 
-module.exports = { Schematic }
+module.exports = { Schematic, parseBlockName }
