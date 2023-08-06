@@ -14,7 +14,7 @@ assignees: ''
 
 ## Versions
  - node: #.#.#
- - prismarine-template: #.#.#
+ - prismarine-schematic: #.#.#
 
 ## Detailed description of a problem
 A clear and concise description of what the problem is.
