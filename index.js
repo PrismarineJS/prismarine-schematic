@@ -130,15 +130,30 @@ class Schematic {
 
   static async read (buffer, version = null) {
     const schem = nbt.simplify(await parseNbt(buffer))
-    try {
-      return sponge.read(schem, version)
-    } catch {
-      return mcedit.read(schem, version)
+    if (version) {
+      const versionedMcData = mcData(version)
+      if (versionedMcData.isNewerOrEqualTo('1.13')) {
+        return sponge.read(schem, version)
+      } else {
+        return mcedit.read(schem, version)
+      }
+    } else {
+      try {
+        return sponge.read(schem, version)
+      } catch {
+        return mcedit.read(schem, version)
+      }
     }
   }
 
   async write () {
-    const schem = sponge.write(this)
+    let schem
+    const versionedMcData = mcData(this.version)
+    if (versionedMcData.isNewerOrEqualTo('1.13')) {
+      schem = sponge.write(this)
+    } else {
+      schem = mcedit.write(this)
+    }
     return gzip(nbt.writeUncompressed(schem))
   }
 
