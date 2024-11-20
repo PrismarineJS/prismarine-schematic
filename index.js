@@ -4,7 +4,7 @@ const parseNbt = promisify(nbt.parse)
 const zlib = require('zlib')
 const gzip = promisify(zlib.gzip)
 const { Vec3 } = require('vec3')
-const mcData = require('minecraft-data')
+const mcData = require('./vendors/cdata')
 
 const sponge = require('./lib/spongeSchematic')
 const mcedit = require('./lib/mceditSchematic')
@@ -18,7 +18,7 @@ class Schematic {
     this.palette = palette
     this.blocks = blocks
     this.blockEntities = blockEntities
-    this.Block = require('prismarine-block')(version)
+    this.Block = require('./vendors/prismarine-block')(version)
   }
 
   start () {
