@@ -7,6 +7,7 @@ const { Vec3 } = require('vec3')
 const mcData = require('minecraft-data')
 
 const sponge = require('./lib/spongeSchematic')
+const spongeV3 = require('./lib/spongeV3Schematic')
 const mcedit = require('./lib/mceditSchematic')
 
 class Schematic {
@@ -130,11 +131,15 @@ class Schematic {
 
   static async read (buffer, version = null) {
     const schem = nbt.simplify(await parseNbt(buffer))
-    try {
-      return sponge.read(schem, version)
-    } catch {
-      return mcedit.read(schem, version)
+    const formats = [sponge, spongeV3, mcedit]
+    for (const format of formats) {
+      try {
+        return format.read(schem, version)
+      } catch (e) {
+
+      }
     }
+    throw new Error('The schematic did not match any supported format')
   }
 
   async write () {

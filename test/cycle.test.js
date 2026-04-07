@@ -13,7 +13,6 @@ describe('cycle test', () => {
       const schemFile = path.join(__dirname, 'schematics', schemName)
       test(`${schemName} read / write`, async () => {
         const schematic = await Schematic.read(await fs.readFile(schemFile))
-
         const tmpFile = path.join(__dirname, schemName + '_test.schem')
 
         await fs.writeFile(tmpFile, await schematic.write())
