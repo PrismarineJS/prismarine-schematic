@@ -7,7 +7,15 @@ const { Vec3 } = require('vec3')
 const mcData = require('minecraft-data')
 
 const sponge = require('./lib/spongeSchematic')
+const spongeV3 = require('./lib/spongeV3Schematic')
 const mcedit = require('./lib/mceditSchematic')
+
+function detectFormat (schem) {
+  if (Number.isInteger(schem.Schematic?.Version)) return `sponge.${schem.Schematic.Version}`
+  if (schem.Materials !== undefined && schem.Blocks !== undefined && schem.Data !== undefined) return 'mcedit'
+  if (Number.isInteger(schem.Version)) return `sponge.${schem.Version}`
+  throw new Error('The schematic does not match a supported format')
+}
 
 class Schematic {
   constructor (version, size, offset, palette, blocks) {
@@ -128,13 +136,17 @@ class Schematic {
     }, this.size.z, this.size.x, this.size.y, at.plus(this.start()))
   }
 
-  static async read (buffer, version = null) {
+  static async read (buffer, version = null, format = null) {
     const schem = nbt.simplify(await parseNbt(buffer))
-    try {
-      return sponge.read(schem, version)
-    } catch {
-      return mcedit.read(schem, version)
-    }
+    const detectedFormat = detectFormat(schem)
+    if (format === 'sponge') format = detectedFormat.startsWith('sponge.') ? detectedFormat : format
+    format = format || detectedFormat
+
+    if (format !== detectedFormat) throw new Error(`Expected ${format} schematic, found ${detectedFormat}`)
+    if (format === 'sponge.1' || format === 'sponge.2') return sponge.read(schem, version)
+    if (format === 'sponge.3') return spongeV3.read(schem, version)
+    if (format === 'mcedit') return mcedit.read(schem, version)
+    throw new Error(`Unsupported schematic format ${format}`)
   }
 
   async write () {
