@@ -1,6 +1,8 @@
 import type { Vec3 } from "vec3";
 import type { Block } from "prismarine-block";
 
+export type SchematicFormat = "mcedit" | "sponge" | "sponge.1" | "sponge.2" | "sponge.3";
+
 export class Schematic {
     public readonly version: string;
     public readonly size: Vec3;
@@ -28,6 +30,6 @@ export class Schematic {
     toJSON( space?: string ): string;
 
     static copy( world: any, start: Vec3, end: Vec3, offset: Vec3, version: string ): Promise<Schematic>;
-    static read( buffer: Buffer, version?: string ): Promise<Schematic>;
+    static read( buffer: Buffer, version?: string | null, format?: SchematicFormat | null ): Promise<Schematic>;
     static fromJSON( string: string ): Schematic;
 }

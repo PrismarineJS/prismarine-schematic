@@ -9,7 +9,7 @@
 Read, write and manipulate minecraft schematics.
 
 Supported formats:
-* [Sponge](https://github.com/SpongePowered/Schematic-Specification) (Read/Write)
+* [Sponge](https://github.com/SpongePowered/Schematic-Specification) v1-v3 (Read; writes v2)
 * [MCEdit](https://minecraft.gamepedia.com/Schematic_file_format) (Read only)
 
 ## Usage
@@ -89,9 +89,10 @@ Static, async. Make a schematic instance from `world` (prismarine-world) between
 
 Async. Paste the schematic in `world` (prismarine-world) at the `at` (vec3) location.
 
-#### Schematic.read(buffer, version=null)
+#### Schematic.read(buffer, version=null, format=null)
 
-Static, async. Return a Schematic instance, read from the buffer. If version is not set, the loader try to autodetect the version from the file.
+Static, async. Return a Schematic instance read from the buffer. If version is not set, the loader tries to autodetect the version from the file.
+The format is detected from the file by default. Set `format` to `mcedit`, `sponge`, `sponge.1`, `sponge.2`, or `sponge.3` to require a particular format.
 
 #### Schematic.write()
 
